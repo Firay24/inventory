@@ -8,6 +8,7 @@ const ModalForm = ({
   item,
   category,
   setUpdated,
+  isMain = false,
 }: {
   isActive: boolean
   onClose: any
@@ -15,8 +16,12 @@ const ModalForm = ({
   item?: any
   setUpdated: any
   category: string
+  isMain?: boolean
 }) => {
   const [itemCount, setItemCount] = useState('')
+  const [itemName, setItemName] = useState('')
+  const [itemLimit, setItemLimit] = useState('')
+  const [itemUnit, setItemUnit] = useState('')
 
   useEffect(() => {
     if (item) {
@@ -31,44 +36,71 @@ const ModalForm = ({
 
   const handleSubmit = () => {
     setUpdated(true)
-    if (category === 'all') {
-      const currentTotalCount = item.store.reduce((total, store) => total + store.count, 0)
-      const newTotalCount = parseInt(itemCount)
-      if (newTotalCount > currentTotalCount) {
-        const difference = newTotalCount - currentTotalCount
-        const updatedStore = item.store.map((store) => ({
-          ...store,
-          count: store.count + difference / 2,
-        }))
+    if (isMain) {
+      const newItem = {
+        id: Date.now(),
+        name: itemName,
+        count: 0,
+        store: [
+          {
+            nameStore: 'Toko A',
+            count: parseInt(itemCount) / 2,
+          },
+          {
+            nameStore: 'Toko B',
+            count: parseInt(itemCount) / 2,
+          },
+        ],
+        limit: parseInt(itemLimit),
+        unitType: itemUnit,
+        status: true,
+        updatedAt: new Date().toISOString().split('T')[0],
+      }
+      addItem(newItem)
+    } else {
+      if (category === 'all') {
+        const currentTotalCount = item.store.reduce((total, store) => total + store.count, 0)
+        const newTotalCount = parseInt(itemCount)
+        if (newTotalCount > currentTotalCount) {
+          const difference = newTotalCount - currentTotalCount
+          const updatedStore = item.store.map((store) => ({
+            ...store,
+            count: store.count + difference / 2,
+          }))
+          const updatedItem = {
+            ...item,
+            store: updatedStore,
+            updatedAt: new Date().toISOString().split('T')[0],
+          }
+          addItem(updatedItem)
+        } else {
+          alert('Jumlah baru harus lebih besar dari jumlah saat ini.')
+          return
+        }
+      } else {
+        const storeIndex = category === 'a' ? 0 : 1
+        const updatedStore = item.store.map((store, index) => {
+          if (index === storeIndex) {
+            return {
+              ...store,
+              count: parseInt(itemCount),
+            }
+          }
+          return store
+        })
         const updatedItem = {
           ...item,
           store: updatedStore,
           updatedAt: new Date().toISOString().split('T')[0],
         }
         addItem(updatedItem)
-      } else {
-        alert('Jumlah baru harus lebih besar dari jumlah saat ini.')
-        return
       }
-    } else {
-      const storeIndex = category === 'a' ? 0 : 1
-      const updatedStore = item.store.map((store, index) => {
-        if (index === storeIndex) {
-          return {
-            ...store,
-            count: parseInt(itemCount),
-          }
-        }
-        return store
-      })
-      const updatedItem = {
-        ...item,
-        store: updatedStore,
-        updatedAt: new Date().toISOString().split('T')[0],
-      }
-      addItem(updatedItem)
     }
     onClose()
+    setItemCount('')
+    setItemLimit('')
+    setItemName('')
+    setItemUnit('')
   }
 
   return (
@@ -79,9 +111,25 @@ const ModalForm = ({
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div className="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">Edit Data</h3>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  {isMain ? 'Tambah data' : 'Edit Data'}
+                </h3>
                 <div className="mt-2">
                   <form>
+                    {isMain ? (
+                      <div className="mb-4">
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                          Nama barang
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
+                          value={itemName}
+                          onChange={(e) => setItemName(e.target.value)}
+                        />
+                      </div>
+                    ) : null}
                     <div className="mb-4">
                       <label
                         htmlFor="itemCount"
@@ -97,6 +145,41 @@ const ModalForm = ({
                         onChange={(e) => setItemCount(e.target.value)}
                       />
                     </div>
+                    {isMain ? (
+                      <>
+                        <div className="mb-4">
+                          <label
+                            htmlFor="itemLimit"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Limit
+                          </label>
+                          <input
+                            type="number"
+                            id="itemLimit"
+                            className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
+                            value={itemLimit}
+                            onChange={(e) => setItemLimit(e.target.value)}
+                          />
+                        </div>
+                        <div className="mb-4">
+                          <label
+                            htmlFor="itemUnit"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Satuan unit
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Kg/buah/biji"
+                            id="itemUnit"
+                            className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
+                            value={itemUnit}
+                            onChange={(e) => setItemUnit(e.target.value)}
+                          />
+                        </div>
+                      </>
+                    ) : null}
                   </form>
                 </div>
               </div>

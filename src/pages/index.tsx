@@ -68,7 +68,7 @@ const DashboardPage = () => {
           </form>
           <button
             onClick={() => {
-              openModal
+              openModal()
               setIsUpdated(false)
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -90,6 +90,7 @@ const DashboardPage = () => {
         addItem={addItem}
         category={category}
         setUpdated={handleUpdated}
+        isMain
       />
     </>
   )
