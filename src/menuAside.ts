@@ -1,16 +1,16 @@
 import {
-  mdiAccountCircle,
+  // mdiAccountCircle,
   mdiMonitor,
-  mdiGithub,
-  mdiLock,
-  mdiAlertCircle,
-  mdiSquareEditOutline,
-  mdiTable,
-  mdiViewList,
-  mdiTelevisionGuide,
-  mdiResponsive,
-  mdiPalette,
-  mdiVuejs,
+  // mdiGithub,
+  // mdiLock,
+  // mdiAlertCircle,
+  // mdiSquareEditOutline,
+  // mdiTable,
+  // mdiViewList,
+  // mdiTelevisionGuide,
+  // mdiResponsive,
+  // mdiPalette,
+  // mdiVuejs,
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
