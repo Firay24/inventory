@@ -8,7 +8,7 @@ import LayoutAuthenticated from '../layouts/Authenticated'
 import NotificationBar from '../components/NotificationBar'
 import SectionMain from '../components/Section/Main'
 import SectionTitleLineWithButton from '../components/Section/TitleLineWithButton'
-import TableSampleClients from '../components/Table/SampleClients'
+// import TableSampleClients from '../components/Table/SampleClients'
 import { getPageTitle } from '../config'
 
 const TablesPage = () => {
@@ -34,9 +34,9 @@ const TablesPage = () => {
           <b>Responsive table.</b> Collapses on mobile
         </NotificationBar>
 
-        <CardBox className="mb-6" hasTable>
+        {/* <CardBox className="mb-6" hasTable>
           <TableSampleClients />
-        </CardBox>
+        </CardBox> */}
 
         <SectionTitleLineWithButton icon={mdiTableOff} title="Empty variation" />
 
